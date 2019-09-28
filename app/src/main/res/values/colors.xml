@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="darkTheme">#222222</color>
+    <color name="darkLightTheme">#393939</color>
+    <color name="dark">#181818</color>
+    <color name="washedOrange">#FFD384</color>
+    <color name="textLight">#676767</color>
+
+
+
+</resources>

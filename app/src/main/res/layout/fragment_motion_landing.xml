@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darkTheme"
+    tools:context=".UI.fragments.MotionLanding">
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/kanit_light"
+        android:text="duration of lock (hours)"
+        android:textColor="@color/textLight"
+        android:textSize="25sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/fluidSliderTwo"
+        app:layout_constraintHorizontal_bias="0.53"
+        app:layout_constraintStart_toStartOf="@+id/fluidSliderTwo"
+        app:layout_constraintTop_toTopOf="@+id/fluidSliderTwo">
+
+    </TextView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/animationLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="75dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="pulse.json"
+            app:lottie_loop="true" />
+
+
+        <ImageView
+            android:id="@+id/inner_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_open_lock"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/animationView">
+
+        </ImageView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    <com.ramotion.fluidslider.FluidSlider
+        android:id="@+id/fluidSliderOne"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:size="small"
+        android:visibility="gone"
+        app:bar_color="@color/dark"
+        app:text_size="20sp"
+        app:bubble_color="@color/washedOrange"
+        app:duration="@android:integer/config_mediumAnimTime"
+        tools:targetApi="lollipop" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/kanit_light"
+        android:text="time to disarm (seconds)"
+        android:visibility="gone"
+        android:textColor="@color/dark"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/fluidSliderOne"
+        app:layout_constraintStart_toStartOf="@+id/fluidSliderOne"
+        app:layout_constraintTop_toTopOf="@+id/fluidSliderOne">
+
+    </TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/kanit_light"
+        android:text="duration of lock (hours)"
+        android:textColor="@color/dark"
+        android:textSize="25sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/fluidSliderTwo"
+        app:layout_constraintHorizontal_bias="0.53"
+        app:layout_constraintStart_toStartOf="@+id/fluidSliderTwo"
+        app:layout_constraintTop_toTopOf="@+id/fluidSliderTwo">
+
+    </TextView>
+
+    <com.ramotion.fluidslider.FluidSlider
+        android:id="@+id/fluidSliderTwo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:elevation="2dp"
+        android:visibility="gone"
+        app:bar_color="@color/dark"
+        app:bubble_color="@color/washedOrange"
+        app:text_size="20sp"
+        app:duration="@android:integer/config_mediumAnimTime"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fluidSliderOne"
+        app:layout_constraintVertical_bias="0.102"
+        app:size="small"
+        tools:targetApi="lollipop" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/motion_logo_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fluidSliderOne"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/explainer_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/kanit_medium"
+        android:text="hold"
+        android:textColor="@color/darkLightTheme"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toTopOf="@+id/animationLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </TextView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
