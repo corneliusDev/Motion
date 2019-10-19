@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.motion">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.justin.motion">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait"
             >
@@ -22,12 +23,6 @@
 
         <service android:name=".service.SensorBackgroundService" />
 
-        <receiver android:name=".service.SampleBootReceiver"
-            android:enabled="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
-            </intent-filter>
-        </receiver>
 
     </application>
 

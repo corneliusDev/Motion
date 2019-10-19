@@ -64,7 +64,7 @@
 
 
 
-    <com.ramotion.fluidslider.FluidSlider
+    <ImageView
         android:id="@+id/fluidSliderOne"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,12 +75,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:size="small"
         android:visibility="gone"
-        app:bar_color="@color/dark"
-        app:text_size="20sp"
-        app:bubble_color="@color/washedOrange"
-        app:duration="@android:integer/config_mediumAnimTime"
         tools:targetApi="lollipop" />
 
     <TextView
@@ -114,7 +109,7 @@
 
     </TextView>
 
-    <com.ramotion.fluidslider.FluidSlider
+    <ImageView
         android:id="@+id/fluidSliderTwo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -122,17 +117,12 @@
         android:layout_marginEnd="20dp"
         android:elevation="2dp"
         android:visibility="gone"
-        app:bar_color="@color/dark"
-        app:bubble_color="@color/washedOrange"
-        app:text_size="20sp"
-        app:duration="@android:integer/config_mediumAnimTime"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fluidSliderOne"
         app:layout_constraintVertical_bias="0.102"
-        app:size="small"
         tools:targetApi="lollipop" />
 
     <ImageView

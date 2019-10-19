@@ -1,6 +1,5 @@
-package com.example.motion.service
+package com.justin.motion.service
 
-import android.app.KeyguardManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -15,8 +14,6 @@ import kotlinx.coroutines.launch
 import android.net.Uri
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.os.PowerManager
-import android.util.Log
 
 
 class SensorBackgroundService : Service(), SensorEventListener {
@@ -34,6 +31,12 @@ class SensorBackgroundService : Service(), SensorEventListener {
     private var isTriggered = false
 
     private var isRegistered = false
+
+    private var time_tile_trigger = 3000L
+
+    private var CHANNEL_ID = "alarm_sensor"
+
+    private var notificationId = 1001
 
     /**
      * treshold values
@@ -85,17 +88,9 @@ class SensorBackgroundService : Service(), SensorEventListener {
 
         }
 
-        // we need the light sensor
-        val sensor = mSensorManager!!.getDefaultSensor(sensorType)
 
-        // TODO we could have the sensor reading delay configurable also though that won't do much
-        // in this use case since we work with the alarm manager
-        mSensorManager!!.registerListener(
-            this, sensor,
-            SensorManager.SENSOR_DELAY_NORMAL
-        )
 
-        return Service.START_STICKY
+        return START_STICKY
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -126,6 +121,7 @@ class SensorBackgroundService : Service(), SensorEventListener {
         if (deltaX > acelDelta || deltaY > acelDelta || deltaZ > acelDelta && !isTriggered) {
             isTriggered = true
             pendingAlarm(this, this.applicationContext)
+
         }
 
         previousValueX = x
@@ -136,20 +132,22 @@ class SensorBackgroundService : Service(), SensorEventListener {
 
 
     fun pendingAlarm(sensor: SensorEventListener, context: Context) {
-        println("=====================================DAYYY!")
-        GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
-            delay(3000L)
+        // launch a new coroutine and keep a reference to its Job. This makes sure the phone is moving for more that three seconds before triggering alarm.
+        GlobalScope.launch {
+            delay(time_tile_trigger)
             if ((deltaX > acelDelta || deltaY > acelDelta || deltaZ > acelDelta) && !isRegistered) {
                 mSensorManager!!.unregisterListener(sensor)
                 isRegistered = true
                 setRingtone(context)
+
             }else{
                 isTriggered = false
             }
         }
+
     }
 
-    fun setRingtone(context: Context){
+    private fun setRingtone(context: Context){
         try {
             val alert = Uri.parse("android.resource://" + context.getPackageName() + "/raw/default_alarm")
             mMediaPlayer = MediaPlayer()
@@ -168,6 +166,11 @@ class SensorBackgroundService : Service(), SensorEventListener {
         }
 
     }
+
+
+
+
+
 
     companion object {
 
@@ -196,14 +199,7 @@ class SensorBackgroundService : Service(), SensorEventListener {
         val KEY_LOGGING = "logging"
     }
 
-    private fun startLogs(){
-        //        Log.i(TAG, "CURRENT VALUES ========== X: " + x + "Y: " + y + "Z: " + z)
-//        Log.i(
-//            TAG,
-//            "PREVIOUS VALUES ========== X: " + previousValueX + "Y: " + previousValueY + "Z: " + previousValueZ
-//        )
-//        Log.i(TAG, "DELTA VALUES ========== X: " + deltaX + "Y: " + deltaY + "Z: " + deltaZ)
-    }
+
 
 
 }

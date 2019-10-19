@@ -1,13 +1,9 @@
-package com.example.motion
+package com.justin.motion
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import com.example.motion.UI.fragments.MotionLanding
-import com.ramotion.fluidslider.FluidSlider
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.justin.motion.UI.fragments.MotionLanding
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun addFragment(){
+    private fun addFragment(){
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         val fragment = MotionLanding()

@@ -1,7 +1,6 @@
-package com.example.motion.UI.fragments
+package com.justin.motion.UI.fragments
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.hardware.SensorManager
@@ -11,16 +10,14 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.ImageView
-import com.example.motion.service.SensorBackgroundService
-import com.ramotion.fluidslider.FluidSlider
+import com.justin.motion.service.SensorBackgroundService
 import kotlinx.android.synthetic.main.fragment_motion_landing.*
 import kotlinx.coroutines.Job
 
 import android.os.Handler
 import android.app.ActivityManager
 import android.os.Vibrator
-import androidx.core.os.HandlerCompat.postDelayed
-import com.example.motion.R
+import com.justin.motion.R
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -41,7 +38,6 @@ class MotionLanding : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
-    private var isRed = true
     private var isTouched = true
     private var isFlat = true
     private var TAG_ROTATE = "Tag Rotate"
@@ -50,15 +46,11 @@ class MotionLanding : Fragment() {
     private var TAG = "Life Cycle"
     private var r:Runnable? = null
     private var handler:Handler? = null
+    private val hold_delay_millis = 2000L
 
     @SuppressLint("ApplySharedPref")
     override fun onResume() {
         super.onResume()
-
-
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        isRed = sharedPref.getBoolean(getString(R.string.is_red), false)
-        Log.i(TAG, "################ onResume Read: " + isRed)
 
         if (!serviceStatus()) {
             if (mOrientationEventListener == null) {
@@ -70,8 +62,6 @@ class MotionLanding : Fragment() {
             isFlat = true
         }
 
-
-
     }
 
     override fun onDestroyOptionsMenu() {
@@ -82,10 +72,9 @@ class MotionLanding : Fragment() {
     @SuppressLint("ApplySharedPref")
     override fun onPause() {
         super.onPause()
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        with (sharedPref.edit()) { putBoolean(getString(R.string.is_red), isRed).commit() }
+
         if (mOrientationEventListener != null ) mOrientationEventListener!!.disable()
-        Log.i(TAG, "################### onPause Write: " + isRed)
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,7 +101,7 @@ class MotionLanding : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-     //   setupSlider()
+
         val intent = Intent(activity, SensorBackgroundService::class.java)
 
         Log.i("Service Running","Background Service Start: " + serviceStatus())
@@ -123,52 +112,47 @@ class MotionLanding : Fragment() {
 
                 val action = p1?.action
 
-
-
                 if (isTouched){
 
                     Log.i("Service Running","Background Service Handler: " + serviceStatus())
                     handler = Handler()
 
-
-                    r = object : Runnable {
-                        override fun run() {
-                            if (!serviceStatus() && isFlat){
-                                println("REDDDDDDDDDD" + isFlat)
-                                isRed = true
-                                view?.findViewById<ImageView>(R.id.inner_image)?.setImageResource(R.drawable.ic_red_lock)
-                                inner_image.alpha = 1f
-                                val vibe:Vibrator = activity?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                                vibe.vibrate(250)
-                                explainer_text.text = "hold"
-                                mOrientationEventListener?.disable()
-                                activity?.startService(intent)
-                            }else{
-                                println("YELLLLLLLOWWWW" + isFlat)
-                                isRed = false
-                                view?.findViewById<ImageView>(R.id.inner_image)?.setImageResource(R.drawable.ic_open_lock)
-                                inner_image.alpha = 1f
-                                val vibe:Vibrator = activity?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                                vibe.vibrate(250)
-                                mOrientationEventListener?.enable()
-                                activity?.stopService(intent)
-                            }
+                    // If service is not running, start service. If service is running, stop service.
+                    r = Runnable {
+                        if (!serviceStatus() && isFlat){
+                            view?.findViewById<ImageView>(R.id.inner_image)?.setImageResource(R.drawable.ic_red_lock)
+                            inner_image.alpha = 1f
+                            val vibe:Vibrator = activity?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                            vibe.vibrate(250)
+                            explainer_text.text = getString(R.string.hold)
+                            mOrientationEventListener?.disable()
+                            activity?.startService(intent)
+                        }else{
+                            view?.findViewById<ImageView>(R.id.inner_image)?.setImageResource(R.drawable.ic_open_lock)
+                            inner_image.alpha = 1f
+                            val vibe:Vibrator = activity?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                            vibe.vibrate(250)
+                            mOrientationEventListener?.enable()
+                            activity?.stopService(intent)
                         }
                     }
 
-                    handler?.postDelayed(r, 2000)
+                    handler?.postDelayed(r, hold_delay_millis)
 
 
                     isTouched = false
+                    // change alpha to signal image has been touched
                     inner_image.alpha = .50f
                 }
 
+
+                // If user lift hand before 2 second delay, remove scheduled runnable
                 if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
                     inner_image.alpha = 1f
                     isTouched = true
 
                     if (r != null){
-                        println("+++++======================Removing Handler Messages")
+
                         handler?.removeCallbacks(r!!)
 
                     }
@@ -230,34 +214,10 @@ class MotionLanding : Fragment() {
             }
     }
 
-    fun setupSlider() {
-        val maxSlider1 = 5
-        val minSlider1 = 1
-        val total1 = maxSlider1 - minSlider1
-
-        val slider1 = view?.findViewById<FluidSlider>(R.id.fluidSliderOne)
-       // slider1?.positionListener = { p -> Log.d("MainActivity", "current position is: $p" )}
-        slider1?.startText = ""
-        slider1?.endText = ""
-        slider1?.positionListener = { pos -> slider1?.bubbleText = "${minSlider1 + (total1  * pos).toInt()}"}
-        slider1?.position = 0.0f
-        // slider.colorBar =
-
-
-        val maxSlider2 = 5
-        val minSlider2 = 1
-        val total2 = maxSlider2 - minSlider2
-
-        val slider2 = view?.findViewById<FluidSlider>(R.id.fluidSliderTwo)
-        slider2?.positionListener = { p -> Log.d("MainActivity", "current position is: $p" )}
-        slider2?.startText = ""
-        slider2?.endText = ""
-        slider2?.positionListener = { pos -> slider2?.bubbleText = "${minSlider2 + (total1  * pos).toInt()}"}
-        slider2?.position = 0.0f
-    }
 
 
     fun attachRotationListener(){
+
         mOrientationEventListener = object : OrientationEventListener(this.requireContext(), SensorManager.SENSOR_DELAY_NORMAL) {
 
             override fun onOrientationChanged(orientation: Int) {
